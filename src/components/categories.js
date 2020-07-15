@@ -1,43 +1,35 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { render } from '../store/store';
+// import {
+     
+// } from '@material-ui/core';
 
 function Categories(props) {
-    let printcategories = [];
-
-    for (let i = 0; i < props.categories.length; i++) {
-        let category = props.categories[i];
-        // console.log('category==', category);
-        printcategories.push(
-            <button
-                key={i}
-                onClick={() => {
-                    props.dispatch({
-                        type: 'SET_CURRENT_CATEGORY',
-                        payload: props.categories[i].name,
-                    });
-                }}
-            >
-                {category.displayName || category.name}
-            </button>,
-        );
-    }
-
-    // console.log('printcategories===', printcategories);
-
+    console.log('Categories props==', props);
     return (
         <div>
-            <section>
-                Browse our Categories
-            </section>
-            <div>
-                {printcategories}
-            </div>
+        <h3>Browse Our Categories</h3>
+        <section>
+            {props.categories.map((data) =>
+                <a onClick={() => props.render(data.name)}>
+                    {data.displayName}
+                </a>
+            )}
+        </section>
         </div>
-    );
+    )
 }
 
-const mapStateToProps = (state) => ({
-    categories: state.categories,
-});
+const mapStateToProps = (state) => {
+    console.log('categories state===', state);
 
-export default connect(mapStateToProps)(Categories);
+    return { 
+        categories: state.reducer.categories 
+    }
+};
+
+const mapDispatchToProps = { render };
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Categories);

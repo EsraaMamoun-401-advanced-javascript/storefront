@@ -1,34 +1,55 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { cart } from '../store/store';
+
+// import {
+
+// } from '@material-ui/core';
 
 function Products(props) {
-    let printProducts = [];
-
-    for (let i = 0; i < props.products.length; i++) {
-        if (props.products[i].category === props.currentCategory) {
-            printProducts.push(<h3 key={i}>{props.products[i].name}</h3>);
-            
-            console.log('props.products[i].name===', props.products[i].name);
-
-            console.log('props.products[i].category==', props.products[i].category);
-
-            console.log('props.currentCategory==', props.currentCategory);
+    console.log('props Products==', props);
+    let currentCategory = '';
+    let description = '';
+    props.products.map(data => {
+        if (data.category === props.activeCategory) {
+            currentCategory = props.activeCategory;
+            description = data.description;
         }
-    }
-    console.log('printProducts==', printProducts);
+    })
+
     return (
-        <>
-            <h2>Products</h2>
-            {printProducts}
-        </>
+        <section>
+            <p>cart: {props.cart.length}</p>
+            <p>{currentCategory}</p>
+            <p>{description}</p>
+            {props.products.map(data => {
+                if (data.category === props.activeCategory) {
+                    return (
+                        <div>
+                            <img src="https://www.cowgirlcontractcleaning.com/wp-content/uploads/sites/360/2018/05/placeholder-img.jpg"/>
+                            <p>{data.name}</p>
+                            <p>Price: {data.price}</p>
+                            <p>In Stock: {data.inStock}</p>
+                    <button /*onClick={() => props.cart(data.name)}*/>Add To Cart</button>
+                            <button>View Details</button>
+                        </div>
+                    );
+                }
+            })}
+        </section>
     );
 }
 
 const mapStateToProps = (state) => {
+    console.log('products state==', state);
     return {
-        products: state.products,
-        currentCategory: state.currentCategory,
+        products: state.reducer.products,
+        categories: state.reducer.categories,
+        activeCategory: state.reducer.active,
+        // cart: state.reducer.cart,
     };
 };
 
-export default connect(mapStateToProps)(Products);
+const mapDispatchToProps = { cart };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Products);

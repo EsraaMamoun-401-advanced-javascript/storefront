@@ -1,5 +1,3 @@
-import { createStore } from 'redux';
-
 let initialState = {
     categories: [
         { name: 'Electronics', displayName: 'Electronics' },
@@ -7,42 +5,57 @@ let initialState = {
         { name: 'Clothing', displayName: 'Clothing' },
     ],
     products: [
-        { name: 'TV', category: 'Electronics', price: 699.99, inStock: 5, description: 'Description TV' },
-        { name: 'Radio', category: 'Electronics', price: 99.0, inStock: 15, description: 'Description Radio' },
-        { name: 'Shirt', category: 'Clothing', price: 9.99, inStock: 25, description: 'Description Shirt' },
-        { name: 'Socks', category: 'Clothing', price: 12.99, inStock: 10, description: 'Description Socks' },
-        { name: 'Apples', category: 'Food', price: 0.99, inStock: 500, description: 'Description Apples' },
-        { name: 'Eggs', category: 'Food', price: 1.99, inStock: 12, description: 'Description Eggs' },
-        { name: 'Bread', category: 'Food', price: 2.39, inStock: 90, description: 'Description Bread' },
+        { name: 'TV', category: 'Electronics', price: 699.99, inStock: 5, description: 'Electronics description' },
+        { name: 'Radio', category: 'Electronics', price: 99.0, inStock: 15, description: 'Electronics description' },
+        { name: 'Shirt', category: 'Clothing', price: 9.99, inStock: 25, description: 'Clothing description' },
+        { name: 'Socks', category: 'Clothing', price: 12.99, inStock: 10, description: 'Clothing description' },
+        { name: 'Apples', category: 'Food', price: 0.99, inStock: 500, description: 'Food description' },
+        { name: 'Eggs', category: 'Food', price: 1.99, inStock: 12, description: 'Food description' },
+        { name: 'Bread', category: 'Food', price: 2.39, inStock: 90, description: 'Food description' },
     ],
-    currentCategory: '',
+    activeCategory: '',
+    inCart: 0,
     cart: [],
+    stockNum: 0,
 };
 
-let reducer = (state = initialState, action) => {
-    let newState = { ...state };
-    switch (action.type) {
-        case 'SET_CURRENT_CATEGORY':
-            newState.currentCategory = action.payload;
-            console.log('action.payload===', action.payload);
-            console.log('newState after currentCategory==', newState);
-            break;
-        case 'ADD_TO_CART':
-            newState.cart.push(action.payload);
-            // console.log('newState after cart==', newState); 
+export default (state = initialState, action) => {
+    let { type, payload } = action;
+    switch (type) {
+        case 'RENDER':
+            // console.log('payload in RENDER case==', payload);
+            let activeCategoryValue = state.activeCategory;
+            activeCategoryValue = payload;
+            // console.log('state.activeCategory==', state.activeCategory);
+            return { categories: state.categories, products: state.products, active: activeCategoryValue };
+            case 'ADD_TO_CART':
+                state.cart.push(payload);
+
+                // return { cart: state.cart, nameProducts: payload }
             break;
         case 'RESET':
-            newState = { ...initialState };
-            break;
+            return initialState;
         default:
-            break;
+            return state;
     }
-    console.log('{ ...initialState }==',  { ...initialState } );
-    console.log('initialState==', initialState);
-    console.log('newState==', newState);
-
-    return newState;
 };
 
-export default createStore(reducer);
-export { reducer };
+export const render = (name) => {
+    return {
+        type: 'RENDER',
+        payload: name
+    }
+}
+
+export const cart = (name) => {
+    return {
+        type: 'ADD_TO_CART',
+        payload: name
+    }
+}
+
+export const reset = () => {
+    return {
+        type: 'RESET'
+    }
+}
