@@ -14,25 +14,27 @@ let initialState = {
         { name: 'Bread', category: 'Food', price: 2.39, inStock: 90, description: 'Food description' },
     ],
     activeCategory: '',
-    inCart: 0,
-    cart: [],
     stockNum: 0,
+    cart: [],
 };
 
 export default (state = initialState, action) => {
     let { type, payload } = action;
+    let copyState = { ...state };
     switch (type) {
         case 'RENDER':
             // console.log('payload in RENDER case==', payload);
-            let activeCategoryValue = state.activeCategory;
+            let activeCategoryValue = copyState.activeCategory;
             activeCategoryValue = payload;
-            // console.log('state.activeCategory==', state.activeCategory);
-            return { categories: state.categories, products: state.products, active: activeCategoryValue };
+            // console.log('copyState.activeCategory==', copyState.activeCategory);
+            return { categories: copyState.categories, products: copyState.products, active: activeCategoryValue };
             case 'ADD_TO_CART':
-                state.cart.push(payload);
+                copyState.cart.push(payload);
+                console.log('payload==', payload);
+                console.log('copyState.cart==', copyState.cart);
 
-                // return { cart: state.cart, nameProducts: payload }
-            break;
+                return { cart: copyState.cart }
+            // break;
         case 'RESET':
             return initialState;
         default:

@@ -30,7 +30,7 @@ function Products(props) {
                             <p>{data.name}</p>
                             <p>Price: {data.price}</p>
                             <p>In Stock: {data.inStock}</p>
-                    <button /*onClick={() => props.cart(data.name)}*/>Add To Cart</button>
+                    <button onClick={() => props.cart(data.name)}>Add To Cart</button>
                             <button>View Details</button>
                         </div>
                     );
@@ -46,7 +46,7 @@ const mapStateToProps = (state) => {
         products: state.reducer.products,
         categories: state.reducer.categories,
         activeCategory: state.reducer.active,
-        // cart: state.reducer.cart,
+        cart: state.reducer.cart,
     };
 };
 
